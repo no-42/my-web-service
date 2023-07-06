@@ -1,0 +1,54 @@
+package ${packageName}.service.impl;
+
+import java.util.Arrays;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import ${packageName}.mapper.${ClassName}Mapper;
+import ${packageName}.domain.entity.${ClassName}Entity;
+import ${packageName}.domain.query.${ClassName}Query;
+import ${packageName}.service.I${ClassName}Service;
+
+/**
+ * ${functionName}Service业务层处理
+ * 
+ * @author ${author}
+ * @date ${datetime}
+ */
+@Service
+public class ${ClassName}ServiceImpl implements I${ClassName}Service {
+    @Autowired
+    private ${ClassName}Mapper ${className}Mapper;
+    
+    @Override
+    public ${ClassName}Entity select${ClassName}By${pkColumn.capJavaField()}(${pkColumn.javaType} ${pkColumn.javaField}) {
+        return ${className}Mapper.selectById(${pkColumn.javaField});
+    }
+    
+    @Override
+    public List<${ClassName}Entity> select${ClassName}List(${ClassName}Query query) {
+        return ${className}Mapper.selectListByQuery(query);
+    }
+
+
+
+    @Override
+    public int insert${ClassName}(${ClassName}Entity ${className}) {
+        return ${className}Mapper.insert(${className});
+    }
+    
+    @Override
+    public int update${ClassName}(${ClassName}Entity ${className}) {
+        return ${className}Mapper.updateById(${className});
+    }
+    
+    @Override
+    public int delete${ClassName}By${pkColumn.capJavaField()}s(${pkColumn.javaType}[] ${pkColumn.javaField}s) {
+        return ${className}Mapper.deleteBatchIds(Arrays.asList(${pkColumn.javaField}s));
+    }
+    
+    @Override
+    public int delete${ClassName}By${pkColumn.capJavaField()}(${pkColumn.javaType} ${pkColumn.javaField}) {
+        return ${className}Mapper.deleteById(${pkColumn.javaField});
+    }
+}

@@ -1,0 +1,63 @@
+package ${packageName}.domain.entity;
+
+#foreach ($import in $importList)
+import ${import};
+#end
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import com.ruoyi.common.annotation.Excel;
+#if($dateEntity )
+import com.ruoyi.common.core.domain.IdDateEntity;
+#else
+import com.ruoyi.common.core.domain.IdEntity;
+#end
+
+/**
+ * ${functionName}对象 ${tableName}
+ * 
+ * @author ${author}
+ * @date ${datetime}
+ */
+#if($dateEntity )
+#set($Entity="IdDateEntity")
+#else
+#set($Entity="IdEntity")
+#end
+@Getter
+@Setter
+@ToString
+@TableName(value = "${tableName}",schema = "${schemaName}")
+public class ${ClassName}Entity extends ${Entity}{
+
+#foreach ($column in $columns)
+#if(!$table.isSuperColumn($column.javaField))
+    /**
+     *  $column.columnComment 
+     */
+#if($column.list)
+#set($parentheseIndex=$column.columnComment.indexOf("（"))
+#if($parentheseIndex != -1)
+#set($comment=$column.columnComment.substring(0, $parentheseIndex))
+#else
+#set($comment=$column.columnComment)
+#end
+#if($parentheseIndex != -1)
+    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
+#elseif($column.javaType == 'Date')
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Excel(name = "${comment}", width = 30, dateFormat = "yyyy-MM-dd")
+#else
+    @Excel(name = "${comment}")
+#end
+#end
+    @TableField("${column.columnName}")
+    private $column.javaType $column.javaField;
+    
+#end
+#end
+
+    
+}

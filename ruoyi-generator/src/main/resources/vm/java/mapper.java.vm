@@ -1,0 +1,15 @@
+package ${packageName}.mapper;
+
+import ${packageName}.domain.entity.${ClassName}Entity;
+import com.ruoyi.common.core.domain.BaseMapper;
+import org.apache.ibatis.annotations.Mapper;
+
+/**
+ * ${functionName}Mapper接口
+ * 
+ * @author ${author}
+ * @date ${datetime}
+ */
+@Mapper
+public interface ${ClassName}Mapper extends BaseMapper<${ClassName}Entity> {
+}

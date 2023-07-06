@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.market.mapper.GoodsInfoMapper">
+
+    <resultMap type="com.ruoyi.market.domain.entity.GoodsInfoEntity" id="GoodsInfoResult">
+        <result property="id" column="id"/>
+        <result property="categoryId" column="category_id"/>
+        <result property="specId" column="spec_id"/>
+        <result property="name" column="name"/>
+        <result property="supplierId" column="supplier_id"/>
+        <result property="originId" column="origin_id"/>
+        <result property="price" column="price"/>
+        <result property="priceUnit" column="price_unit"/>
+    </resultMap>
+
+    <resultMap id="GoodsInfoDtoResult" type="com.ruoyi.market.domain.dto.GoodsInfoDto">
+        <result property="id" column="id"/>
+        <result property="categoryId" column="category_id"/>
+        <result property="categoryName" column="category_name"/>
+        <result property="specId" column="spec_id"/>
+        <result property="specName" column="spec_name"/>
+        <result property="name" column="name"/>
+        <result property="supplierId" column="supplier_id"/>
+        <result property="supplierName" column="supplier_name"/>
+        <result property="originId" column="origin_id"/>
+        <result property="originName" column="origin_name"/>
+        <result property="price" column="price"/>
+        <result property="priceUnit" column="price_unit"/>
+    </resultMap>
+
+    <sql id="selectGoodsInfoDtoSql">
+        select goods.id,
+               goods.category_id,
+               category.name as category_name,
+               goods.spec_id,
+               spec.name     as spec_name,
+               goods.name,
+               goods.supplier_id,
+               supplier.name as supplier_name,
+               goods.origin_id,
+               origin.name   as origin_name,
+               goods.price,
+               goods.price_unit
+
+        from market.goods_info as goods
+                 left join market.goods_category as category on category.id = goods.category_id
+                 left join market.goods_spec as spec on spec.id = goods.spec_id
+                 left join market.goods_origin as origin on origin.id = goods.origin_id
+                 left join market.goods_supplier as supplier on supplier.id = goods.supplier_id
+
+    </sql>
+
+    <select id="selectGoodsInfoDtoList" resultMap="GoodsInfoDtoResult">
+        <include refid="selectGoodsInfoDtoSql"/>
+        <where>
+            <if test="categoryId != null  and categoryId != ''">
+                and goods.category_id = #{categoryId}
+            </if>
+            <if test="name != null and name != ''">
+                and goods.name like '%' || #{name} || '%'
+            </if>
+            <if test="categoryName != null and categoryName != ''">
+                and category.name like '%' || #{categoryName} || '%'
+            </if>
+            <if test="specId != null and specId != ''">
+                and spec.id = #{specId}
+            </if>
+            <if test="originId != null and originId != ''">
+                and origin.id = #{originId}
+            </if>
+            <if test="supplierId != null and supplierId != ''">
+                and supplier.id = #{supplierId}
+            </if>
+            <if test="search != null and search != ''">
+                and (
+                category.name like '%' || #{search} || '%'
+                or spec.name like '%' || #{search} || '%'
+                or origin.name like '%' || #{search} || '%'
+                or supplier.name like '%' || #{search} || '%'
+                )
+            </if>
+        </where>
+    </select>
+    <select id="selectGoodsInfoDtoById" resultMap="GoodsInfoDtoResult">
+        <include refid="selectGoodsInfoDtoSql"/>
+        where goods.id = #{id}
+    </select>
+</mapper>
